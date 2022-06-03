@@ -1,19 +1,21 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
-} from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from 'firebase/auth';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBpcdrzRW0QejXgpP--mRAOpQlhPqEQCT0",
-  authDomain: "crown-clothing-react-911.firebaseapp.com",
-  projectId: "crown-clothing-react-911",
-  storageBucket: "crown-clothing-react-911.appspot.com",
-  messagingSenderId: "145800832129",
-  appId: "1:145800832129:web:2ac6eba6e42efdb9cb5980",
+  apiKey: 'AIzaSyBpcdrzRW0QejXgpP--mRAOpQlhPqEQCT0',
+  authDomain: 'crown-clothing-react-911.firebaseapp.com',
+  projectId: 'crown-clothing-react-911',
+  storageBucket: 'crown-clothing-react-911.appspot.com',
+  messagingSenderId: '145800832129',
+  appId: '1:145800832129:web:2ac6eba6e42efdb9cb5980',
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -21,7 +23,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const googleProvider = new GoogleAuthProvider();
 
 googleProvider.setCustomParameters({
-  prompt: "select_account",
+  prompt: 'select_account',
 });
 
 export const auth = getAuth();
@@ -32,8 +34,12 @@ export const signInWithGoogleRedirect = () =>
 
 export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth) => {
-  const userDocRef = doc(db, "users", userAuth.uid);
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInformation = {}
+) => {
+  if (!userAuth) return;
+  const userDocRef = doc(db, 'users', userAuth.uid);
 
   console.log(userDocRef);
 
@@ -53,12 +59,40 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         displayName,
         email,
         createdAt,
+        ...additionalInformation,
       });
     } catch (error) {
-      console.log("error creating the user", error.message);
+      console.log('error creating the user', error.message);
     }
   }
 
   // if exist, return userDocRef
   return userDocRef;
 };
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+// export const createUserDocumentFromEmailAndPassword = async (userAuth) => {
+//   console.log(userAuth);
+//   const { email, displayName } = userAuth;
+//   const createdAt = new Date();
+//   const userSnapshot = await getDoc(userAuth);
+
+//   console.log(userSnapshot);
+//   if (!userSnapshot.exists()) {
+//     try {
+//       await setDoc(userAuth, {
+//         displayName,
+//         email,
+//         createdAt,
+//       });
+//       console.log(userSnapshot);
+//     } catch (error) {
+//       console.log('error creating the user', error.message);
+//     }
+//   }
+// };
