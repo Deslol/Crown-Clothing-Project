@@ -5,12 +5,15 @@ import {
   signInAuthUserWithEmailAndPassword,
 } from '../../utils/firebase/firebase.utils';
 
-import { useState, useContext } from 'react';
+import {
+  useState,
+  // useContext
+} from 'react';
 
 import FormInput from '../form-input/form-input.component.jsx';
 import Button from '../button/button.component';
 
-import { UserContext } from '../../context/user.context.jsx';
+// import { UserContext } from '../../context/user.context.jsx';
 
 const defaultFormFields = {
   email: '',
@@ -21,7 +24,7 @@ const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const { setCurrentUser } = useContext(UserContext);
+  // const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => setFormFields(defaultFormFields);
 
@@ -30,15 +33,25 @@ const SignInForm = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
+  //   console.log(error);
+  //   if (error.code === 'auth/wrong-password')
+  //     alert('Incorrect password for Email');
+  // }
+
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+  };
+
   const submitHandler = async (event) => {
     event.preventDefault();
 
     try {
-      const { user } = await signInAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
-      setCurrentUser(user);
+      await signInAuthUserWithEmailAndPassword(email, password);
+      // const { user } = await signInAuthUserWithEmailAndPassword(
+      //   email,
+      //   password
+      // );
+
       resetFormFields();
       //   console.log(user);
     } catch (error) {
@@ -54,18 +67,6 @@ const SignInForm = () => {
       }
     }
   };
-  //   console.log(error);
-  //   if (error.code === 'auth/wrong-password')
-  //     alert('Incorrect password for Email');
-  // }
-
-  const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    setCurrentUser(user);
-    await createUserDocumentFromAuth(user);
-    console.log('clicked');
-  };
-
   return (
     <div className='sign-in-container'>
       <h2>I already have an account</h2>
