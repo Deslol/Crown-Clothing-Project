@@ -7,13 +7,19 @@ import { UserProvider } from './context/user.context.jsx';
 import reportWebVitals from './reportWebVitals';
 
 import './index.scss';
+import { ProductProvider } from './context/product.context';
+import { DropDownProvider } from './context/drop-down.context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
   <BrowserRouter>
     <UserProvider>
-      <App />
+      <ProductProvider>
+        <DropDownProvider>
+          <App />
+        </DropDownProvider>
+      </ProductProvider>
     </UserProvider>
   </BrowserRouter>
   // </React.StrictMode>
