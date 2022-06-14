@@ -1,0 +1,17 @@
+.confirmation-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 20px;
+  width: max-content;
+  margin: 0 auto;
+}
+
+.alert {
+  color: rgb(180, 14, 14);
+  justify-self: center;
+}
+
+.information-container {
+  justify-items: center;
+  align-items: center;
+}

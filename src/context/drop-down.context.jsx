@@ -31,7 +31,7 @@ export const DropDownContext = createContext({
   setIsCartOpen: () => {},
   cartItems: [],
   addItemToCart: () => {},
-  cartCount: 0,
+  // cartCount: 0,
 });
 
 export const DropDownProvider = ({ children }) => {
@@ -56,6 +56,7 @@ export const DropDownProvider = ({ children }) => {
     addItemToCart,
     cartItems,
     cartCount,
+    setCartItems,
   };
 
   return (
